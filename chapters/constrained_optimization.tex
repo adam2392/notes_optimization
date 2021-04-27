@@ -1,0 +1,314 @@
+\documentclass[class=article, crop=false]{standalone}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage[subpreambles=true]{standalone}
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\theoremstyle{lemma}
+\newtheorem*{lemma}{Lemma}
+
+\theoremstyle{theorem}
+\newtheorem*{theorem}{Theorem}
+
+\theoremstyle{corollary}
+\newtheorem*{corollary}{Corollary}
+
+\theoremstyle{property}
+\newtheorem*{property}{Property}
+\usepackage[subpreambles=true]{standalone}
+\usepackage{import}
+\begin{document}
+
+\section{Constrained Optimization}
+	Constrained optimization is now considering the minimization of problems under constraint functions. The general formulation is:
+
+		$$\min_{x \in \mathbb{R}^d} f(x) \quad s.t.\ \begin{cases} c_i(x) = 0, i \in \mathcal{E} \\ c_i(x) \ge 0, i \in \mathcal{I} \end{cases}$$
+
+	where $\mathcal{I}, \mathcal{E}$ are taken to be index sets for inequality constraint functions and equality constraint functions. d is the dimensionality of the data, and $f(x)$ is the objective function. Without the $c(x)$ constraint functions, this is simply an unconstrained optimization problem.
+
+	These functions are essentially \textbf{almost} assumed to be smooth. In that sense, continuously differentiable (possibly twice for second order conditions). However, note that the constraint functions $c(x)$ are not necessarily linear. They can be of general forms, but as long as they are smooth, then we can derive general conditions for optimality.
+
+	\subsection{Basic Definitions}
+		Since constraints are added, the notion of a feasible solution is different compared to unconstrained optimization problems.
+
+		\begin{definition}[Lagrangian]
+			The Lagrangian of the general optimization problem adds a "Lagrange multiplier" that penalizes the constraint conditions:
+
+			$$L(x, \lambda) = f(x) - \sum_{i \in \mathcal{E} \cup \mathcal{I}} \lambda_i c_i(x)$$
+
+			It is important from the perspective of first-order necessary optimality conditions (i.e. the KKT conditions).
+		\end{definition}
+
+		\begin{definition}[Feasible set]
+			The feasible set $\Omega$ is the set of all points that satisfy the objective function and satisfy the constraints. Generally, we assume the objective function allows data to live in $\mathbb{R}^d$, so the feasible set is:
+
+				$$\Omega = \{x \in \mathbb{R}^d | c_i(x) = 0, i \in \mathcal{E};\ c_i(x) \ge 0, i \in \mathcal{I} \}$$
+		\end{definition}
+
+		Since there are constraints, there is a notion of "active constraints", which simply tells us which constraint functions equal 0.
+
+		\begin{definition}[Active constraint set]
+			The active set A(x) at any \textbf{feasible} point x, consists of 
+			constraints such that $c(x) = 0$. 
+
+			Note: Since $c_i(x) = 0 \forall i \in \mathcal{E}$, the active set is:
+
+			$$A(x) = \mathcal{E} \cup \{i \in \mathcal{I} | c_i(x) = 0\}$$
+		\end{definition}
+
+		Geometrically, we are generally very interested in the tangent vector, tangent cone, or tangent plane. Cones are geometric objects that points can arbitrarily scale by a positive value and still be within the cone.
+
+		\begin{definition}[Tangent vector and cone]
+			The tangent vector, d, to the feasible set, $\Omega$ at a point $x \in \Omega$ if there is a feasible sequence approaching x and a sequence of positive scalars $\{t_k\} \rightarrow 0$ such that:
+
+				$$\lim_{k \rightarrow \infty} \frac{z_k - x}{t_k} = d$$
+
+			The tangent cone is the set of all tangent vectors to $\Omega$ at $x$ and is denoted by $T_\Omega(x)$
+		\end{definition}
+
+		Now, in the derivation of first-order optimality conditions, one might be interested in obtaining a feasible direction set. That is a set of directions that are going to improve the objective function. Using first-order gradient information, we can define the first-order feasible direction set.
+
+		\begin{definition}[First order feasible direction set]
+			For a feasible point $x \in \Omega$, and active constraint set, $A(x)$, the set of linearized feasible directions is:
+
+				$$F(x) = \{ d \in \mathbb{R}^d | d^T \nabla c_i(x) = 0, \ \forall i \in \mathcal{E};\ d^T \nabla c_i(x) \ge 0,\ \forall i \in \mathcal{I}\}$$
+
+			Note F(x) is a cone
+		\end{definition}
+
+	\subsection{Karush-Kuhn-Tucker Conditions}
+		\subsubsection{Basic Theorems and Lemmas}
+			To prove the KKT theorem, we first prove a lemma relating the tangent cone and the first-order feasible direction set. A fundamental condition is the LICQ constraint qualification. This condition tells us that the constraints are in a sense "not redundant" because they each provide linearly "independent" information.
+
+			\begin{definition}[Linear independence constraint qualification (LICQ)]
+				Given point x and active set A(x), we say LICQ holds if the set of active constraint gradients $\{\nabla c_i(x) | i \in A(x) \}$is linearly independent.
+			\end{definition}
+
+			\begin{lemma}
+				If $x^* \in \Omega$ is a feasible point, then the following two statements are true:
+
+				i) The tangent cone is a subset of the feasible direction set, $T_\Omega(x^*) \subset F(x^*)$
+				ii) If the LICQ condition is satisfied at $x^*$, then the tangent cone and feasible direction set are equivalent.
+			\end{lemma}
+
+			Finally, the most important setp in proving the KKT theorem is Farka's lemma, which is important because it will characterize our descent directions in optimization.
+
+			\begin{lemma} [Farka's lemma]
+				Let cone $K = \{By + Cw | y \ge 0\} \subset \mathbb{R}^n$, where $B \in M_{n \times m}$ and $C \in M_{n \times p}$ and $y \in \mathbb{R}^m$ and $w \in \mathbb{R}^p$. K is a cone that lives in $\mathbb{R}^n$.
+
+				Given any vector $g \in \mathbb{R}^n$, one of the two conditions holds:
+
+				i) $g \in K$
+				ii) there exists $d \in \mathbb{R}^n$ such that $g^T d < 0$, and $B^T d \ge 0$ and $C^T d = 0$
+
+				Note: in the second case, the vector d defines a separating hyperplane between the vector g and the cone K.
+			\end{lemma}
+			\begin{proof}
+				First, we will show that only one of the two is possible at a time. Assume by way of contradiction that both hold.
+
+				If $g \in K$, then there exists vecotrs $y \ge 0$ and w such that $g = By + Cw$ by definition. 
+
+				If there also exists d such that $g^T d < 0$, and $B^T d \ge 0$ and $C^T d = 0$, then taking the inner product of d with g, we obtain:
+
+					$$d^t g = d^T (By + Cw) = (B^Td)^T y + (C^Td)w \ge 0$$
+
+				Now, $d^T g < 0$ by assumption, so we reach a contradiction and hence neither can hold simultaneously. Now, we show that one of the statements is true. 
+
+				If $g \notin K$, then define $\hat{s} \in K$, such that $\hat{s} = \min_{s \in K} ||s - g||$. Note that K is a closed set, so $\hat{s}$ is well defined and can be the limit point of some sequence that approaches the minimum of $||s -g||$. $\alpha \hat{s} \in K$ also, by definition of a cone. We will show that $d = \hat{s} - g$ is the vector that satisfies condition ii) in the statement. Since $g \notin K$, then $d \neq 0$. Then, 
+
+					$$d^Tg = d^T(\hat{s} - d) = (\hat{s} - g)^T \hat{s} - d^T d$$
+
+				Earlier, we note that $\alpha = 1$ minimizes the problem $\min_\alpha ||\alpha \hat{s} - g||$, so by first-order optimality conditions, we have:
+
+					$$\frac{d}{d\alpha} ||\alpha \hat{s} - g||_2^2|_{\alpha=1} = 0$$
+
+				which implies that $\hat{s}^T (\hat{s} - g) = 0$. Using this fact, we have that $d^Tg = 0 - ||d||_2^2 < 0$, which is the first statement in condition ii).
+
+				Now, note thta $d^T s \ge 0$ for all $s \in K$, then the second and third statement is satisfied. 
+			\end{proof}
+		\subsubsection{First-order optimality conditions}
+			The KKT conditions state a set of necessary conditions for any optimal solution (local, or global). They make use of gradient information for the objective and constraint functions.
+
+			\begin{theorem}[KKT First Order]
+				Suppose $x^*$ is a local solution and f(x) and $c_i(x)$ are continuously differentiable and that LICQ holds at $x^*$.
+
+				Then there exists a Lagrange multiplier vector $\lambda^*$ with dimensionality equal to $|\mathcal{E}| + |\mathcal{I}|$, such that the following conditions are satisfied at the point $(x^*, \lambda^*)$:
+
+				\begin{enumerate}
+					\item Gradient of Lagrangian evaluated at local solution is zero: $\nabla_x L(x^*, \lambda^*) = 0$
+					\item Equality constraint is satisfied: $c_i(x^*) =0, \ \forall i \in \mathcal{E}$
+					\item Inequality constraint is satisfied: $c_i(x^*) \ge 0,\ \forall i \in \mathcal{I}$
+					\item Non-negative Lagrange multipliers for Inequality Constraints: $\lambda_i^* \ge 0,\ \forall i \in \mathcal{I}$, since directionality of any vector matters (because constraint is only satisfied on one side of the function!).
+					\item Complementarity Condition: $\lambda_i^* c_i(x^*) = 0,\ \forall i \in \mathcal{E} \cup \mathcal{I}$
+				\end{enumerate}
+
+				Note: The $\lambda^*$ is not necessarily unique if the LICQ condition does not hold, but it \textbf{will be} unique if LICQ holds.
+			\end{theorem}
+		\subsubsection{Second-order optimality conditions}
+			The basic idea of second-order optimality conditions stems from, the fact that if we seek to minimize f(x), such that $x \in \Omega$, then:
+
+				$$w^T \nabla f(x^*) > 0 => \text{ f increases in direction of $x^* + cw$}$$
+
+			Therefore, first order optimality conditions tell us that we want to move in a direction opposite of the gradient to decrease the value of f(x).
+
+			However, if $w^T \nabla f(x^*) = 0$, then we will want to use second-order information. 
+
+			In unconstrained optimization, note that if $\nabla^2 f(x^*) = 0$, then we might not know. In $\mathbb{R} \rightarrow \mathbb{R}$, we know that $f'(x) = 0$ implies a critical point. If $f''(x) < 0$, then it is in fact a local minima. Therefore, the sufficient second-order condition for local minima is that $f''(x) > 0$, whereas the necessary second-order condition is that $f''(x) \ge 0$.
+
+			% tie to constrained optimization now
+			Recall that the linearized feasible direction set at $x^*$ is:
+
+				$$F(x^*) = \{d : d^T \nabla c_i(x^*) = 0\ \forall i \in \mathcal{E};\ d^T \nabla c_i(x^*) \ge 0\ \forall i \in \mathcal{I}\}$$
+
+			From the set of $F(x^*)$, we can also define the critical cone, $C(x^*, \lambda^*)$, which are a pair of points $(x^*, \lambda^*)$ that satisfy the first-order KKT conditions.
+
+			\begin{definition} [Critical Cone]
+				The critical cone $C(x^*, \lambda^*)$ is defined as follows:
+
+				\begin{equation}
+				w \in C(x^*, \lambda^*) <=> \begin{cases} 
+				\nabla c_i(x^*)^T w = 0 \ \forall i \in \mathcal{E} \\
+				\nabla c_i(x^*)^T w = 0 \ \forall i \in A(x^*), \lambda^*_i > 0 \\
+				\nabla c_i(x^*)^T w \ge 0 \ \forall i \in A(x^*), \lambda_i = 0
+				\end{cases}
+				\end{equation}
+			\end{definition}
+
+			The directions where $\lambda_i^* = 0$, then that means that direction for that constraint does not matter. Heuristically, $C(x^*, \lambda^*)$ is the set of directions where small changes to the objective remain at the boundary of the constraints.
+
+			% note on "directions" in the critical cone
+			If the gradients of the constraints at feasible point $x^*$ is equal to 0 are linearly independent, with Lagrange multipliers, $\lambda^* > 0$, then the only directions that satisfy $w^T \nabla f(x^*) = 0$ are the ones in the critical cone. Thus the critical cone defines the directions that we need to look at because the first-order conditions tell us nothing in these directions and whether or not the objective, f, will increase or decrease. Thus the \textbf{second order condition theorems} tell us what the directions in the critical cone look like with respect to the Hessian of the Lagrangian. Note that the critical cone is a subset of the linearized feasible direction set. In addition, the critical cone is a set of "linear directions", but looking at the \textbf{curvature} of the objective function and constraint functions simultaneously.
+
+			% second order theorems for optimality
+			This next theorem tells us additional necessary conditions in terms of the second-order information on the objective function. It sells us that the quadratic form of the Hessian of the Lagrangian with the critical cone directions must be non-negative in order for the point of interest to be a local solution.
+
+			\begin{theorem} [Second-order necessary optimality conditions]
+				If $x^*$ is a local solution satisfying LICQ and $\lambda^*$ is an associated Lagrange multiplier, then taking the quadratic form (i.e. inner product of $w$) with the Hessian of the Lagrangian:
+
+				$$w^T \nabla_{xx}^2 L(x^*, \lambda^*) \ge 0 \ \forall w \in C(x^*, \lambda^*)$$
+			\end{theorem}
+
+			There are also second order \textbf{sufficient} conditions for optimality. 
+
+			\begin{theorem} [Second-order sufficient optimality]
+				Suppose that for some feasible point $x^* \in \mathbb{R}^n$, there is a Lagrange multiplier vector $\lambda^*$ such that the first-order KKT conditions are satisfied. If in addition, we have:
+
+					$$w^T \nabla_{xx}^2 L(x^*, \lambda^*)w > 0$$
+				for all $w \neq 0 \in C(x^*, \lambda^*)$, the critical cone. Then $x^*$ is a strict local solution.
+			\end{theorem}
+
+		\subsubsection{Projected Hessians}
+
+			As noted earlier, the Lagrange multipliers, $\lambda^*$, satisfying the KKT conditions are unique when LICQ conditions hold and strict complementarity holds. When these are unique, then the critical cone, $C(x^*, \lambda^*)$ reduces to:
+
+				$$C(x^*, \lambda^*) = Null[ \nabla c_i(x^*)^T ]_{i \in \mathcal{A}(x^*)} = Null A(x^*)$$
+
+			where $A(x^*)^T = [\nabla c_i(x^*)]_{i \in \mathcal{A}(x^*)}$ is the matrix with rows of active constraint gradients at $x^*$. 
+
+			% restatement of necessary second-order condition
+			We can define the following matrix, Z, with full column rank whose columns span the critical cone space, $C(x^*, \lambda^*)$:
+
+				$$C(x^*, \lambda^*) = \{ Zu | u \in \mathbb{R}^{|A(x^*)|}\}$$
+
+			That is, the critical cone consists of vectors with dimensionality equal to the number of active constraints multiplied by this Z matrix. 
+
+			The condition of the 2nd-order necessary condition can be restated as:
+
+				$$u^T Z^T \nabla_{xx}^2 L(x^*, \lambda^*) Zu \ge 0 \ \forall u$$
+
+			or that $Z^T \nabla_{xx}^2 L(x^*, \lambda^*) Z$ is positive semidefinite by definition of PSD matrices in having non-negative quadratic form. 
+
+			% numerical computation of Z
+			This matrix, Z, may actually be computed numerically, and then the conditions of the theorem may be checked by checking the eigenvalues!
+
+			First, one applies a QR factorization to the matrix of active constraint gradients, so we may obtain the null space.
+
+	\subsection{Geometric Interpretation of Optimality Conditions}
+		We can in addition to the algebraic descriptions of optimality conditions, look at it from a geometric perspective. To do so, we define various geometric objects first.
+
+		\begin{definition} [Normal Cone]
+			The normal cone to the feasible set, $\Omega$, at the point $x \in \Omega$ is:
+
+				$$N_\Omega(x) = \{v | v^Tw \le 0 \ \forall w \in T_\Omega(x) \}$$
+
+			where $T_\Omega(x)$ is the tangent cone at the point x. 
+
+			Note: by the definition saying $v^Tw \le 0$, every normal vector, v, makes an angle of at least $\pi/2$ with every tangent vector.
+		\end{definition}
+
+		Thus, we can re-write the first-order necessary condition in terms of the normal cone.
+
+		\begin{theorem} [First-order necessary condition for optimality based on normal cone]
+
+			Suppose $x^* \in \Omega$ is a local minimizer of f. Then:
+
+				$$- \nabla f(x^*) \in N_\Omega(x^*)$$
+		\end{theorem}
+
+	\subsection{Duality in Constrained Optimization}
+		Duality theory is a broad field that allows one to construct \textbf{alternative} formulations to a problem. Duality theory shows interesting relationships between the primal and dual problem, and in some cases the dual problem is significantly easier to solve computationally. In other cases, dual problems can be used to bound the optimal value in the primal problem. 
+
+		In the primal problem, we are interested in minimizing a function of $x$ our data. In the dual problem, we are interested in \textbf{maximizing} a function of $\lambda$, our "Lagrange multipliers".
+
+		The following is the general primal problem without equality constraints (for simplicity).
+
+			$$\min_{x \in \mathbb{R}^n} f(x) \quad s.t.\ c_i(x) \ge 0\ \forall i = 1,...,m$$
+
+		Duality allows us to rewrite this function based on the Lagrangian:
+
+			$$L(x, \lambda) = f(x) - \lambda^T c(x)$$
+
+		such that we get the dual objective function: $q: \mathbb{R}^n \rightarrow \mathbb{R}$:
+
+			$$q(\lambda) := \inf_{x} L(x, \lambda)$$
+
+		It has a domain:
+
+			$$D = \{ \lambda | q(\lambda) > - \infty \}$$
+
+		The computation of this infimum requires finding the \textbf{global} minimizer of the function $L(., \lambda)$ for a fixed $\lambda$, which can be arbitrarily difficult. If $L(x, \lambda)$ is convex though for a fixed $\lambda$, then we may use convex optimization to obtain a \textbf{minimizer that is global}. and then the dual optimization problem is:
+
+			$$\max_{\lambda \in \mathbb{R}^n} q(\lambda) \quad s.t.\ \lambda \ge 0$$
+
+		\subsubsection{Bounding Solutions - Weak and Strong Duality}
+
+			Earlier, we alluded to the fact that we could \textbf{bound} optimal solutions to the primal problem \textbf{using} solutions from the dual problem.
+
+			\begin{theorem} []
+				The function q is concave and its domain D is convex.
+			\end{theorem}
+
+			Next, we define the term \textbf{weak-duality}, which provides a lower-bound on the optimal minimal value to the primal objective problem. 
+
+			\begin{theorem} [Weak-Duality]
+				For any $\tilde{x} \in \Omega$ feasible, and any $\tilde{\lambda} \ge 0$, we have that:
+
+					$$q(\tilde{\lambda}) \le f(\tilde{x})$$
+			\end{theorem}
+	\subsection{Penalty Methods - Using Unconstrained with Penalty for Constrained Problems}
+
+		
+
+	\subsection{References}
+		Nocedal, and Wright. Springer series in operations research and financial engineering Springer, New York, NY, 2. ed. edition, (2006).
+\end{document}

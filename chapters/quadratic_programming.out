@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{section.1}{Quadratic Programming}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Equality-constrained QPs}{section.1}% 2
+\BOOKMARK [3][-]{subsubsection.1.1.1}{Inertia of the KKT matrix}{subsection.1.1}% 3
+\BOOKMARK [3][-]{subsubsection.1.1.2}{Matrix Factorization Methods for Solving the KKT System}{subsection.1.1}% 4
+\BOOKMARK [3][-]{subsubsection.1.1.3}{Iterative Methods for Solving the KKT System}{subsection.1.1}% 5
+\BOOKMARK [2][-]{subsection.1.2}{Inequality Constrained QPs}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.3}{Active set methods for convex QPs}{section.1}% 7
+\BOOKMARK [3][-]{subsubsection.1.3.1}{Optimal step size in QP subproblem}{subsection.1.3}% 8
+\BOOKMARK [3][-]{subsubsection.1.3.2}{Termination and Summary of the Algorithm}{subsection.1.3}% 9
+\BOOKMARK [3][-]{subsubsection.1.3.3}{Initialization of the QP - Initial Estimate and Initial Working Set}{subsection.1.3}% 10
+\BOOKMARK [1][-]{section.2}{Sequential Quadratic Program}{}% 11
+\BOOKMARK [2][-]{subsection.2.1}{Local SQP For Equality Constraints}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.2}{QP SubProblem}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.3}{Trust-Region SQP}{section.2}% 14
+\BOOKMARK [2][-]{subsection.2.4}{References}{section.2}% 15

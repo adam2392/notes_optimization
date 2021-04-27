@@ -1,0 +1,33 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Multivariate Calculus Short Review}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Constrained Optimization}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Basic Definitions}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{Karush-Kuhn-Tucker Conditions}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Basic Theorems and Lemmas}{subsection.2.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.2.2}{First-order optimality conditions}{subsection.2.2}% 7
+\BOOKMARK [3][-]{subsubsection.2.2.3}{Second-order optimality conditions}{subsection.2.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.4}{Projected Hessians}{subsection.2.2}% 9
+\BOOKMARK [2][-]{subsection.2.3}{Geometric Interpretation of Optimality Conditions}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.4}{Duality in Constrained Optimization}{section.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.4.1}{Bounding Solutions - Weak and Strong Duality}{subsection.2.4}% 12
+\BOOKMARK [2][-]{subsection.2.5}{Penalty Methods - Using Unconstrained with Penalty for Constrained Problems}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.6}{References}{section.2}% 14
+\BOOKMARK [1][-]{section.3}{Linear Programming}{}% 15
+\BOOKMARK [2][-]{subsection.3.1}{Duality in LP}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.2}{References}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{Quadratic Programming}{}% 18
+\BOOKMARK [2][-]{subsection.4.1}{Equality-constrained QPs}{section.4}% 19
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Inertia of the KKT matrix}{subsection.4.1}% 20
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Matrix Factorization Methods for Solving the KKT System}{subsection.4.1}% 21
+\BOOKMARK [3][-]{subsubsection.4.1.3}{Iterative Methods for Solving the KKT System}{subsection.4.1}% 22
+\BOOKMARK [2][-]{subsection.4.2}{Inequality Constrained QPs}{section.4}% 23
+\BOOKMARK [2][-]{subsection.4.3}{Active set methods for convex QPs}{section.4}% 24
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Optimal step size in QP subproblem}{subsection.4.3}% 25
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Termination and Summary of the Algorithm}{subsection.4.3}% 26
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Initialization of the QP - Initial Estimate and Initial Working Set}{subsection.4.3}% 27
+\BOOKMARK [1][-]{section.5}{Sequential Quadratic Program}{}% 28
+\BOOKMARK [2][-]{subsection.5.1}{Local SQP For Equality Constraints}{section.5}% 29
+\BOOKMARK [2][-]{subsection.5.2}{QP SubProblem}{section.5}% 30
+\BOOKMARK [2][-]{subsection.5.3}{Trust-Region SQP}{section.5}% 31
+\BOOKMARK [3][-]{subsubsection.5.3.1}{Penalty SQP - with l1 penalties}{subsection.5.3}% 32
+\BOOKMARK [2][-]{subsection.5.4}{References}{section.5}% 33

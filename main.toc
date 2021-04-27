@@ -1,0 +1,33 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Multivariate Calculus Short Review}{2}{subsection.1.1}
+\contentsline {section}{\numberline {2}Constrained Optimization}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Basic Definitions}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Karush-Kuhn-Tucker Conditions}{5}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Basic Theorems and Lemmas}{5}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}First-order optimality conditions}{6}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Second-order optimality conditions}{6}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Projected Hessians}{8}{subsubsection.2.2.4}
+\contentsline {subsection}{\numberline {2.3}Geometric Interpretation of Optimality Conditions}{8}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Duality in Constrained Optimization}{9}{subsection.2.4}
+\contentsline {subsubsection}{\numberline {2.4.1}Bounding Solutions - Weak and Strong Duality}{9}{subsubsection.2.4.1}
+\contentsline {subsection}{\numberline {2.5}Penalty Methods - Using Unconstrained with Penalty for Constrained Problems}{10}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}References}{10}{subsection.2.6}
+\contentsline {section}{\numberline {3}Linear Programming}{10}{section.3}
+\contentsline {subsection}{\numberline {3.1}Duality in LP}{10}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}References}{10}{subsection.3.2}
+\contentsline {section}{\numberline {4}Quadratic Programming}{10}{section.4}
+\contentsline {subsection}{\numberline {4.1}Equality-constrained QPs}{11}{subsection.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}Inertia of the KKT matrix}{12}{subsubsection.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}Matrix Factorization Methods for Solving the KKT System}{12}{subsubsection.4.1.2}
+\contentsline {subsubsection}{\numberline {4.1.3}Iterative Methods for Solving the KKT System}{12}{subsubsection.4.1.3}
+\contentsline {subsection}{\numberline {4.2}Inequality Constrained QPs}{13}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Active set methods for convex QPs}{13}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}Optimal step size in QP subproblem}{14}{subsubsection.4.3.1}
+\contentsline {subsubsection}{\numberline {4.3.2}Termination and Summary of the Algorithm}{14}{subsubsection.4.3.2}
+\contentsline {subsubsection}{\numberline {4.3.3}Initialization of the QP - Initial Estimate and Initial Working Set}{15}{subsubsection.4.3.3}
+\contentsline {section}{\numberline {5}Sequential Quadratic Program}{15}{section.5}
+\contentsline {subsection}{\numberline {5.1}Local SQP For Equality Constraints}{16}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}QP SubProblem}{17}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Trust-Region SQP}{17}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Penalty SQP - with $l_1$ penalties}{18}{subsubsection.5.3.1}
+\contentsline {subsection}{\numberline {5.4}References}{18}{subsection.5.4}

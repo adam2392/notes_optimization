@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+
+\usepackage{import}
+\usepackage[subpreambles=true]{standalone}
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}[section]
+
+% \theoremstyle{remark}
+% \newtheorem*{remark}{Remark}
+
+% \theoremstyle{lemma}
+% \newtheorem*{lemma}{Lemma}
+
+% \theoremstyle{theorem}
+% \newtheorem*{theorem}{Theorem}
+
+% \theoremstyle{corollary}
+% \newtheorem*{corollary}{Corollary}
+
+\theoremstyle{proposition}
+\newtheorem*{proposition}{Proposition}
+
+\title{Optimization}
+
+\author{
+  Adam Li, \\
+  Department of Applied Mathematics \& Statistics, \\
+  Department of Biomedical Engineering, \\
+  Johns Hopkins University, \\
+  Baltimore, MD, 21218 \\
+  \texttt{ali39@jhu.edu / adam2392@gmail.com}
+}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+	In these notes, I go over important results in optimization theory. Primarily, the focus will be on general unconstrained optimization, constrained optimization, convex optimization and then stochastic optimization. These are all big fields in themselves, so these notes serve as more of a high-level reference.
+
+	I assume working knowledge of matrix analysis and real analysis.
+
+  Currently, the first chapter deals with results in constrained optimization, namely the KKT conditions and second-order optimality conditions for general constrained problems. We will discuss algorithms in the following class of problems:
+
+  \begin{enumerate}
+    \item Linear Programming: simplex method, interior point methods, ellipsoid methods
+    \item Quadratic Programming: active set methods, interior point methods, gradient projection methods
+    \item General Optimization: penalty and augmented Lagrangian, sequential quadratic programming and interior point methods
+  \end{enumerate}
+
+  \subsection{Multivariate Calculus Short Review}
+    Here are some useful multivariate calculus tips:
+
+    Gradient of Ax wrt x: 
+
+      $$\nabla_x Ax = A$$
+
+    Taking the gradient of the quadratic form:
+
+      $$\nabla_x x^T A x = Ax + A^T x$$
+
+    Following a post on \href{https://math.stackexchange.com/questions/222894/how-to-take-the-gradient-of-the-quadratic-form?noredirect=1&lq=1}{stack-exchange}, we re-state some useful facts in taking gradients of matrix multiplications with respect to vectors.
+
+    The first rule is how to take a derivative of a dot-product between two vectors:
+
+      $$\frac{\partial x^T y}{\partial x} = y$$
+
+    The second rule is the chain rule:
+
+      $$\frac{d(f(x,y))}{dx} = \frac{\partial (f(x,y))}{\partial x} + \frac{\partial y^T(x)}{\partial x} \frac{\partial f(x, y)}{\partial y}$$
+
+    where the chain rule accounts for any dependencies on x for the variable y (i.e. y might be a function of x). If y is an independent variable, then the RHS's 2nd addition becomes 0.
+
+    Let us solve for $f(x) = 1/2 x^T A x - b^T x + c$ the gradient wrt x.
+
+      $$\dfrac{d(b^Tx)}{d x} = \dfrac{d (x^Tb)}{d x} = b$$
+
+    and
+
+      $$\dfrac{d (x^TAx)}{d x} = \dfrac{\partial (x^Ty)}{\partial x} +  \dfrac{d (y(x)^T)}{d x} \dfrac{\partial (x^Ty)}{\partial y}$$
+
+    Now substituting $y = Ax$, we can arrive at the conclusion that:
+
+      $$\dfrac{d (x^TAx)}{d x} = \dfrac{\partial (x^Ty)}{\partial x} +  \dfrac{d( y(x)^T)}{d x} \dfrac{\partial (x^Ty)}{\partial y} = y + \dfrac{d (x^TA^T)}{d x} x = y + A^Tx = (A+A^T)x$$
+
+% constrained optimization
+\subimport{chapters/}{constrained_optimization}
+
+\subimport{chapters/}{linear_programming}
+
+\subimport{chapters/}{quadratic_programming}
+
+
+\end{document}

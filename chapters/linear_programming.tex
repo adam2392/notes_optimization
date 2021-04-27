@@ -1,0 +1,59 @@
+\documentclass[class=article, crop=false]{standalone}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage[subpreambles=true]{standalone}
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}[section]
+
+% \theoremstyle{remark}
+% \newtheorem*{remark}{Remark}
+
+% \theoremstyle{lemma}
+% \newtheorem*{lemma}{Lemma}
+
+% \theoremstyle{theorem}
+% \newtheorem*{theorem}{Theorem}
+
+% \theoremstyle{corollary}
+% \newtheorem*{corollary}{Corollary}
+
+% \theoremstyle{property}
+% \newtheorem*{property}{Property}
+% \usepackage[subpreambles=true]{standalone}
+% \usepackage{import}
+\begin{document}
+
+\section{Linear Programming}
+	Linear programs have by definition a \textbf{linear objective function} and \textbf{linear constraints}. The resulting feasible set is a \textbf{convex, connected polytope} set with flat, polygonal faces (think intersections of halfplanes and lines).
+
+	The linear program standard form is:
+
+		$$\min c^Tx \quad s.t.\ Ax = b,\ x\ge0$$
+
+	with $c, x \in \mathbb{R}^n$ and $b \in \mathbb{R}^m$, and $A \in \mathbb{R}^{m \times n}$, with m constraints, and n being the dimensionality of the data points. 
+
+	\subsection{Duality in LP}
+
+		As we saw in general duality theory, we have a way of writing optimization problems in a dual form. This dual form may, or may not be well-defined, but in the case of well-defined Linear programs, one can easily derive the dual problem.
+
+		Weak duality allows that the maximum of the dual is a lower-bound for the minimum of the primal problem. In strong duality scenarios, these two points actually coincide! Thus in strong duality, one can leverage two functional representations of the desired optimization to obtain better algorithms.
+
+	\subsection{References}
+		Nocedal, and Wright. Springer series in operations research and financial engineering Springer, New York, NY, 2. ed. edition, (2006).
+\end{document}

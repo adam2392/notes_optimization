@@ -1,0 +1,302 @@
+\documentclass[class=article, crop=false]{standalone}
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{import}
+\usepackage[subpreambles=true]{standalone}
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+
+% \theoremstyle{definition}
+% \newtheorem{definition}{Definition}[section]
+
+% \theoremstyle{remark}
+% \newtheorem*{remark}{Remark}
+
+% \theoremstyle{lemma}
+% \newtheorem*{lemma}{Lemma}
+
+% \theoremstyle{theorem}
+% \newtheorem*{theorem}{Theorem}
+
+% \theoremstyle{corollary}
+% \newtheorem*{corollary}{Corollary}
+
+% \theoremstyle{property}
+% \newtheorem*{property}{Property}
+% \usepackage[subpreambles=true]{standalone}
+% \usepackage{import}
+\begin{document}
+
+\section{Quadratic Programming}
+	Now, we extend the optimization problem to a quadratic objective function and linear constraints (known as a quadratic program - QP). This type of program actually arises in many subproblems for general constrained optimziation, such as sequential quadratic programming (SQP), augmented Lagrangian methods and interior point methods.
+
+	The general QP formulation is the following:
+
+	\begin{align}
+		\min_x q(x) = \frac{1}{2} x^T G x + x^Tc \\
+		\text{subject to } a_i^T x = b_i, \quad i \in \mathcal{E} \\
+		a_i^T x \ge b_i, \quad i \in \mathcal{I}
+	\end{align}
+
+	We concern ourselves now with mainly convex QPs, where the Hessian matrix of G is positive semidefinite.
+
+	\subsection{Equality-constrained QPs}
+		First, we study the case of having only equality constraints in the QP. That is, the form of the optimization problem is:
+
+		\begin{align}
+			\min_{x \in \mathbb{R}^n} q(x) = \frac{1}{2} x^T G x + x^T c\\
+			\text{subject to } Ax = b
+		\end{align}
+
+		where A is a $m \times n$ Jacobian of constraints matrix with $m \le n$ (wide matrix), whose rows are $a_i^T$. Here $i \in \mathcal{E}$ and $\mathcal{I} = \phi$. $b \in \mathbb{R}^m$. 
+
+		We assume that A has full row-rank (i.e. rank(A) = m), so that the constraints are consistent. First, we can analyze the first-order necessary contitions for $x^*$ through the KKT conditions, such that that there is a vector $\lambda^*$ that satsifies the following system of equations:
+
+		\begin{equation}
+			\begin{pmatrix} G && -A^T \\ A && 0 \end{pmatrix} \begin{pmatrix} x^* \\ \lambda^* \end{pmatrix} = \begin{pmatrix} -c \\ b \end{pmatrix}
+		\end{equation}
+
+		Usually, this is rewritten with $x^* = x + p$, where x is an estimate of the solution and p is the desired step. This change of variables is important because it allows us to plug in any initial estimate x, and then compute the desired offset to the optimal solution. This might be more efficient then say, directly inverting the KKT matrix.
+
+		\begin{equation}
+		\label{eq:kkt_matrix_eqns}
+			K = \begin{pmatrix} G && A^T \\ A && 0 \end{pmatrix} \begin{pmatrix} -p \\ \lambda^* \end{pmatrix} = \begin{pmatrix} g \\ h \end{pmatrix}
+		\end{equation}
+
+		which is also known as the \textbf{KKT matrix}. Here:
+
+			$$h = Ax-b$$
+
+		and $g = Gx + c$ and $p = x^* - x$
+
+		Note that there is a unique solution for $(x^*, \lambda^*)$, when the KKT matrix is nonsingular. The next lemma gives conditions on the original constraint matrix, A, and the reduced-Hessian matrix such that the KKT matrix is non-singular. We define a matrix, Z, as a $n \times (n-m)$ matrix whose columns comprise of the null space of A. 
+
+		\begin{lemma} [Sufficient conditions that KKT matrix is nonsingular]
+			If A has full row rank, and the reduced-Hessian matrix $Z^T G Z$ is positive definite, then the KKT matrix is nonsingular.
+		\end{lemma}
+
+		In addition to having a unique solution, the vector $x^*$ is a unique global solution under the assumptions of the above lemma.
+
+		\begin{theorem} [Sufficient conditions that solution to KKT matrix problem is unique global solution]
+			If A has full row rank, and the reduced-Hessian matrix $Z^T G Z$ is positive definite, then the vector $x^*$ satisfying the system of equations in \ref{eq:kkt_matrix_eqns} is a global unique solution.
+		\end{theorem}
+
+		Given that we have a nice theoretical properties where solving the KKT system for a nice-enough A and G matrix, then we are guaranteed a unique and global solution to our optimization problem. Now, we are interested in \textbf{efficient} methods for solving the KKT system. 
+
+		\subsubsection{Inertia of the KKT matrix}
+			First, let us define the inertia of a symmetric matrix to be:
+
+			\begin{definition} [inertia]
+				inertia(K) = $(n_+, n_-, n_0)$ where $n_+, n_-, n_0$ are the number of positive, negative and zero eigenvalues respectively.
+			\end{definition}
+
+			Note that when $m \ge 1$, the KKT matrix is always indefinite. We can characterize the inertia of the KKT matrix:
+
+			\begin{theorem} [Inertia of the KKT matrix]
+				Let K be the KKT matrix and suppose A has rank m. Then the inertia of K is:
+
+					$$inertia(K) = inertia(Z^T G Z) + (m, m, 0)$$
+
+				So if $Z^T G Z$ is positive definite, then inertia(K) = (n, m, 0).
+			\end{theorem}
+
+			Thus this tells us that the KKT system is always indefinite when at least one constraint. To solve this system of equations, there are now a few approaches one can take.
+
+		\subsubsection{Matrix Factorization Methods for Solving the KKT System}
+			Direct methods involve matrix factorization either by: 
+			i) symmetric indefinite factorization
+			ii) the Schur-complement method
+			iii) Null-space method
+
+		\subsubsection{Iterative Methods for Solving the KKT System}
+			When you have a very large system, or you have a desire to implement parallelization, then an iterative approach can be taken.
+
+	\subsection{Inequality Constrained QPs}
+		When we introduce inequality constraints, now the problem becomes more complex. One can use active-set methods, or interior point methods. Before we explore methods for solving these class of problems, we review the optimality conditions for inequality-constrained QPs. First, we write the Lagrangian for this problem and then write the KKT conditions for this problem:
+
+		\textbf{KKT conditions of inqequality-constrained QP}
+		\begin{align} 
+			\label{eq:ineq_qp_kkt_conditions}
+			Gx^* + c - \sum_{i \in A(x^*)} \lambda_i^* a_i = 0 \\
+			a_i^T x^* = b_i \quad \text{for all } i \in A(x^*) \\
+			a_i^T x^* \ge b_i \quad \text{for all } i \in \mathcal{I}/\ A(x^*) \\
+			\lambda_i^* \ge 0 \quad \text{for all } i \in \mathcal{I} \cap A(x^*)
+		\end{align}
+
+		Similar to the equality constrained problem, if we assume that G is positive semidefinite, and a feasible point satisfies the conditions above, then we can show this proposed point is a global solution.
+
+		\begin{theorem} [Sufficient conditions for a global solution]
+			If $x^*$ satisfies the \ref{eq:ineq_qp_kkt_conditions} conditions for some $\lambda^*_i$ for $i \in A(x^*)$ (that is constrain i is in the active set), and G is PSD, then $x^*$ is a global solution of the QP.
+		\end{theorem}
+		\begin{corollary} [Uniqueness]
+			If in addition, G is PD, then $x^*$ is a global unique solution of the QP.
+		\end{corollary}
+
+	\subsection{Active set methods for convex QPs}
+		We have seen that equality-constrained QPs are easily analyzed and solved with matrix factorization methods that essentially attempt to invert the KKT matrix to provide a solution.
+
+		We consider active-set methods here for the case of a convex QP (i.e. when the G matrix is PSD). If we knew the active set at the optimal $x^*$; that is $A(x^*)$, then we can find solutions using matrix factorization in the equality-constrained problem.
+
+		However, since we do not \textbf{explicitly} know which constraints are active at the optimal solution, then we must also in tandem, determine the components of this set in a solver. As a reminder, the active set methods derive from the KKT conditions that stipulate that an inequality constraint either is active, or its Lagrange multiplier is zero (and thus does not affect the objective function).
+
+		We will explore primal active-set methods, where we solve an equality-constrained QP as a subproblem based on the current \textbf{active working set}. The equality constraints are the actual equality constraints of the problem and the inequality constraints of the problem that are in the working set. Thus at each iterate, we solve the following QP subproblem:
+
+		\begin{align}
+			\min_p \frac{1}{2} p^T G p + g_k^T p \\
+			\text{subject to } a_i^T p = 0, \quad i \in \mathcal{W}_k
+		\end{align}
+
+		where $g_k = G x_k + c$ and $p = x - x_k$. This subproblem will produce a solution, $p_k$. The $p_k$ variable tells us at iterate k, how much to move along this direction from our $x_k$ vector. We move in that direction a fraction of $p_k$ that depends on where all constraints are met (including ones not in the working set). That is:
+
+			$$x_{k+1} = x_k + \alpha_k p_k$$
+
+		where $\alpha_k \in [0, 1]$ is our step size at iteration k. How might we choose $\alpha_k$ in a theoretically supported manner?
+
+		\subsubsection{Optimal step size in QP subproblem}
+			We can derive an explicit formula for $\alpha_k$ by considering what happens to the contraints that are not in the working set. If $a_i^T p_k \ge 0$ for some $i \notin W_k$, then for all $\alpha_k \ge 0$, we have the following inequality:
+
+				$$a_i^T (x_k + \alpha_k p_k) \ge a_i^T x_k \ge b_i$$
+
+			The constraint $i$ will satisfied for non-negative $\alpha_k$. Therefore, $\alpha_k$ is upper-bounded as:
+
+				$$\alpha_k \le \frac{b_i - a_i^T x_k}{a_i^T p_k}$$
+
+			Since we want to decrease the objective, q, as much as possible, we want $\alpha_k$ as large as possible in its possible interval [0, 1], while remaining feasible. 
+
+				$$\alpha_k = min(1, \min_{i \notin W_k, a_i^T p_k < 0} \frac{b_i - a_i^T x_k}{a_i^T p_k})$$
+
+			Thus, if $\alpha_k \neq 1$, then the constraints, at which the minimum is achieved, then those $i \notin W_k$ are called the blocking constraints. That is, these constraints block the program from taking a further step in the direction, $p_k$. We can continue these iterations, and construct a new working set, where $W_{k+1}$ is $W_k$ plus one of the blocking constraints from $W_k$. Then one can arrive at a solution, when all blocking constraints are added, and the subproblem as a solution $p = 0$.
+
+		\subsubsection{Termination and Summary of the Algorithm}
+			However, with inequality constraints, by the KKT conditions, we know that the corresponding Lagrange multipliers must be non-negative. If we find a corresponding $i \in \hat{W} \cap \mathcal{I}$, such that $\hat{\lambda}_i < 0$, then we can actually \textbf{decrease the objective} further by just removing that constraint.
+
+			The following summarizes how the active-set QP proceeds.
+
+			\begin{enumerate}
+				\item Initialize a working set, $W_0$
+				\item Compute the first-order direction to decrease the objective, $p_k$
+				\item Compute the corresponding step size to take in this direction, $\alpha_k$
+				\item Add any blocking constraints in to form the new working set, $W_k$
+				\item Repeat the program
+				\item When converged, check the signage of the Lagrange multipliers of the inequality constraints
+				\item Remove constraints if necessary and repeat program
+			\end{enumerate}
+
+			When we arrive at a solution, characterized by $p_k = 0$, then we have a KKT point. Furthermore, by the earlier theorem, if G is PD, then it is a unique global solution. Thus the value of the direction vector tell us our termination condition (i.e. 0 or not 0).
+
+		\subsubsection{Initialization of the QP - Initial Estimate and Initial Working Set}
+			Now, that we have examined the theoretical properties of the active-set method for convex QPs, we are interested in examining the optimal way to initialize this program. There are two things to determine: i) initial feasible point and ii) initial working set.
+
+			An initial feasible point can be given by the Phase I approach in linear programming.
+
+			To obtain the initial working set, $W_0$, one can simply take a linearly independent subset of the active constraints at the solution of the feasibility problem. Note that when selecting the initial working set, adding a blocking constraint and deleting a constraint cannot introduce linear dependence, so the initialization with a linearly independent constraint set ensures linear independence.
+
+			In general, this is a difficult problem.
+
+\section{Sequential Quadratic Program}
+	% introduction of the SQP problem
+	These can be seen as active set methods for non-linear programming. The SQP is an effective method for nonlinearly constrained optimization, which generates steps by solving QP subproblems. We mainly consider active-set methods, which are now capable of handling significant nonlinearities in the constraints. Again, the objective program that we consider is:
+
+		$$\min_{x \in \mathbb{R}^n} f(x) \quad s.t.\ c_i(x) = 0 \ i \in \mathcal{E}, \quad c_i(x) \ge 0 \ i \in \mathcal{I}$$
+
+	where now, f and c are assumed to be smooth functions (i.e. continuously differentiable N times). However, we do not \textbf{assume} that c is a linear function in x. There are two approaches to such classes of problems:
+
+	\begin{enumerate}
+		\item Inequality Constrained Quadratic Program (IQP): Here, we compute an estimate of the active set and the step direction at the same time.
+		\item EQP: here first estimate the active set, and then solve a quadratic program with equality constraints restricted to the active set.
+	\end{enumerate}
+
+	To understand SQP methods, we will need to:
+
+	\begin{enumerate}
+		\item develop local methods for computing the step 
+		\item line search and trust-region methods to achieve convergence from remote starting points.
+	\end{enumerate}
+
+	First, let us expore the local SQP with equality constraints only.
+
+	\subsection{Local SQP For Equality Constraints}
+
+		We consider only equality constraints first. The general approach is to form a KKT matrix and then use Newton's method for solving a system of equations. We know that the Lagrangian function for this problem is:
+
+			$$L(x, \lambda) = f(x) - \lambda^T c(x)$$
+
+		We say $A(x)^T = \begin{pmatrix} \nabla c_1(x), \hdots \nabla c_m(x) \end{pmatrix}$ is the Jacobian matrix of the constraints that is a $n \times m$ matrix (n dimensions and m constraints). The first-order necessary KKT conditions for optimality can be written as a system of n+m equations and n+m unknowns.:
+
+			$$F(x, \lambda) = \begin{pmatrix} \nabla f(x) - A(x)^T \lambda \\ c(x) \end{pmatrix} = 0$$
+
+		This stems from the KKT conditions. In order to solve this with nonlinearities, we can use Newton's method by:
+
+		\begin{enumerate}
+			\item Computing the Jacobian of $F(x, \lambda)$
+			\item Compute the Newton step for $(x_k, \lambda_k)$
+			\item Plug in $(p_k, p_\lambda)$ to the Newton-KKT system
+		\end{enumerate}
+
+		The Jacobian of F is:
+
+			$$F'(x, \lambda) = \begin{pmatrix} \nabla_{xx}^2 L(x, \lambda) && -A(x)^T \\ A(x) && 0 \end{pmatrix}$$
+
+		and the Newon step is given by:
+
+			$$x_{k+1} = x_k + p_k,\quad \lambda_{k+1} = \lambda_k + p_\lambda$$
+
+		where $(p_k, p_\lambda)$ are obtained by solving the Newon-KKT system:
+
+			$$\begin{pmatrix} \nabla_{xx}^2 L(x, \lambda) && -A_k^T \\ A_k && 0 \end{pmatrix} \begin{pmatrix} p_k \\ p_\lambda \end{pmatrix} = \begin{pmatrix} -\nabla f_k + A_k^T \lambda_k \\ c_k \end{pmatrix}$$
+
+		As seen before in the linear QP, and by properties of block matrices, we know that the Newton step is well-defined with a unique solution for the step if the KKT matrix is nonsingular. This KKT matrix is nonsingular if:
+
+		\begin{enumerate}
+			\item A(x) the Jacobian matrix has full row rank (no redundant constraints)
+			\item The Hessian of the Lagrangian is positive definite on the tangent space of the constraints
+		\end{enumerate}
+
+	\subsection{QP SubProblem}
+		Alternatively to the Newton method update, we can model the problem as a "sequential" QP problem, where the iterates are computed as a solution of a QP. The SQP fraamework is more practical and can be extended to inequality-constraints.
+
+		By our earlier analysis, we saw that in general solving inequality-constraint QPs involve some "guess" of the active set of constraints, and then an update. In this nonlinear inequality QP, we will see that if we can guess correctly the active set of constraints for the nonlinear problem, then we will get rapid Newton-like convergence to a local solution.
+
+		\begin{theorem} [Robinson theorem for rapid convergence of SQP for nonlinear problems]
+			Suppose $x^*$ is a local solution for our problem at which the KKT conditions are satisifed for some $\lambda^*$. We assume the LICQ conditions. In addition, we assume strict complementarity and second-order sufficient conditions hold at $(x^*, \lambda^*)$. 
+
+			Then if $(x_k, \lambda_k)$ are sufficiently close to $(x^*, \lambda^*)$, there is a local solution of the QP subproblem whose active set $A_k$ is the same as the acitve set $A(x^*)$ of the nonlinear program.
+		\end{theorem}
+
+		This is a qualitative theoretical result that informs us that given a \textbf{good iterate that is "close" to our optimal solution}, then our working active set will converge to the true active set of the problem at a \textbf{local solution}.
+
+	\subsection{Trust-Region SQP}
+		Trust-region methods to solve SQP are good when one does not have the Hessian matrix, $\nabla_{xx}^2 L_k$, as positive definite. That is, \textbf{there is some level of control over the singularities of the Jacobian and Hessian matrices} and there is a mechanism for enforcing global convergence. A way to formulate the trust-region SQP is to add a trust-region constraint subproblem:
+
+			\begin{align}
+			\label{eq:trust_region_sqp_problem}
+			\min_p f_k + \nabla f_k^T p + \frac{1}{2} p^T \nabla_{xx}^2 L_k p \\
+			\text{subject to } \nabla c_i(x_k)^T p + c_i(x_k) = 0,\quad i \in \mathcal{E} \\
+			\nabla c_i(x_k)^T p + c_i(x_k) \ge 0, \quad i \in \mathcal{I} \\
+			||p|| \le \Delta_k \quad \text{Trust region of step}
+			\end{align}
+
+		This subproblem requires us to compute a trust-region that upper-bounds the size of our direction. However, it is quite possible that this naive formulation results in an inconsistent system, where the step, p, lies outside the trust region. Hence there is no solution at that step. To tackle this issue, we review relaxation methods, penalty methods and filter methods to obtain convergent trust-region SQP methods.
+
+		\subsubsection{Penalty SQP - with $l_1$ penalties}
+			Here, we move the linearized constraints into the objective of the QP with a $l_1$ penalty term to obtain the following subproblem:
+
+				$$\min_p f_k + \nabla f_k^T p + \frac{1}{2} p^T \nabla_{xx}^2 L_k p + \mu \sum_{i \in \mathcal{E}} |c_i(x_k) + \nabla c_i(x_k)^T p | + \nu \sum_{i \in \mathcal{I}} [c_i(x_k) + \nabla c_i(x_k)^T p ]^- \\ \text{subject to } ||p||_\infty \le \Delta_k$$
+
+			where the penalty of the inequality constraints is $[y]^- = max(0, -y)$.
+
+	\subsection{References}
+		Nocedal, and Wright. Springer series in operations research and financial engineering Springer, New York, NY, 2. ed. edition, (2006).
+\end{document}
